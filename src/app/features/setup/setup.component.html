@@ -1,0 +1,83 @@
+<div class="setup">
+  <div class="setup__header">
+    <span class="setup__brand">Scotland Yard</span>
+    <button type="button" class="setup__rulebook-btn" (click)="toggleRulebook()">
+      Spielanleitung
+    </button>
+  </div>
+
+  <div class="setup__columns">
+    <div class="column">
+      <label class="field">
+        Spielplan
+        <select [(ngModel)]="variant">
+          <option value="klassisch">Klassisch (1983)</option>
+          <option value="modern">Modern (2000)</option>
+        </select>
+      </label>
+
+      <label class="field">
+        Ich spiele als
+        <select [(ngModel)]="humanRole">
+          <option value="misterX">Mister X (Detektive = KI)</option>
+          <option value="detectives">Detektiv-Team (Mister X = KI)</option>
+        </select>
+      </label>
+
+      <label class="field">
+        Anzahl Detektive
+        <select [(ngModel)]="detectiveCount" (ngModelChange)="onDetectiveCountChange()">
+          <option [value]="2">2</option>
+          <option [value]="3">3</option>
+          <option [value]="4">4</option>
+          <option [value]="5">5</option>
+        </select>
+      </label>
+
+      <label class="checkbox-field">
+        <input type="checkbox" [(ngModel)]="alwaysRevealMisterX" />
+        Mister X immer sichtbar (Entwicklungsmodus – später deaktivieren)
+      </label>
+    </div>
+
+    <div class="column">
+      <div class="field-label">Startpositionen</div>
+      <div class="slot">
+        <span class="dot dot--mister-x"></span>
+        Mister X – Start
+        <input type="number" [(ngModel)]="misterXStart" min="1" [max]="maxStation" />
+      </div>
+      <div class="slot" *ngFor="let s of slots">
+        <span class="dot" [class]="'dot--' + s.color"></span>
+        Detektiv {{ s.color }} – Start
+        <input type="number" [(ngModel)]="s.startStation" min="1" [max]="maxStation" />
+      </div>
+      <button type="button" class="secondary" (click)="regenerateSlots()">Neu auslosen</button>
+      <p class="hint">
+        Tipp: Trage hier die Nummern deiner physischen Startkarten ein, wenn du die
+        Originalverteilung nutzen möchtest.
+      </p>
+    </div>
+  </div>
+
+  <button type="button" class="primary" (click)="submit()">Spiel starten</button>
+</div>
+
+<div class="rulebook-overlay" *ngIf="rulebookOpen" (click)="toggleRulebook()">
+  <div class="rulebook-modal" (click)="$event.stopPropagation()">
+    <div class="rulebook-modal__header">
+      <span class="sy-plaque">Spielanleitung</span>
+      <button type="button" class="rulebook-modal__close" (click)="toggleRulebook()">✕</button>
+    </div>
+    <div class="rulebook-modal__body">
+      <p class="rulebook-modal__source">
+        Wortwörtlicher Originaltext der Spielanleitung
+        (Ravensburger Spiele Nr. 604 51427, © 1983 by Otto Maier Verlag Ravensburg).
+      </p>
+      <section *ngFor="let section of rulebookSections">
+        <h3>{{ section.title }}</h3>
+        <p *ngFor="let paragraph of section.paragraphs">{{ paragraph }}</p>
+      </section>
+    </div>
+  </div>
+</div>

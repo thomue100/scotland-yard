@@ -1,0 +1,35 @@
+.hud {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.hud__brand {
+  font-family: var(--sy-font-display);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.03em;
+  color: var(--sy-brass-light);
+  white-space: nowrap;
+}
+
+.hud__info {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  font-family: var(--sy-font-sans);
+  font-size: 14px;
+  color: var(--sy-paper);
+}
+
+.hud__turn strong {
+  color: var(--sy-brass-light);
+}
+
+.hud__winner {
+  font-family: var(--sy-font-display);
+  font-weight: 700;
+  color: var(--sy-brass-light);
+  font-size: 16px;
+}

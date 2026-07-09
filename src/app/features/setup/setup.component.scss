@@ -1,0 +1,259 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.setup {
+  background: var(--sy-paper);
+  color: var(--sy-ink);
+  border-radius: var(--sy-radius);
+  padding: 20px 28px;
+  width: 100%;
+  max-width: 900px;
+  max-height: 94vh;
+  box-sizing: border-box;
+  font-family: var(--sy-font-sans);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.setup__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.setup__brand {
+  font-family: var(--sy-font-display);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 0.03em;
+}
+
+.setup__rulebook-btn {
+  font-family: var(--sy-font-sans);
+  font-weight: 600;
+  font-size: 13px;
+  padding: 7px 14px;
+  border-radius: 4px;
+  border: 1px solid var(--sy-brass-dark);
+  background: transparent;
+  color: var(--sy-ink);
+  cursor: pointer;
+}
+
+.setup__rulebook-btn:hover {
+  background: var(--sy-paper-dark);
+}
+
+/* Horizontale Zwei-Spalten-Aufteilung, damit der gesamte Dialog ohne Scrollen passt. */
+.setup__columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.field-label {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.checkbox-field {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 1.4;
+  background: var(--sy-paper-dark);
+  padding: 8px 10px;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+.checkbox-field input {
+  margin-top: 2px;
+}
+
+select,
+input[type='number'] {
+  font-family: var(--sy-font-mono);
+  font-size: 13px;
+  padding: 5px 7px;
+  border: 1px solid var(--sy-brass-dark);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--sy-ink);
+}
+
+.slot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+
+.slot input {
+  width: 64px;
+  margin-left: auto;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot--blau { background: var(--sy-blau); }
+.dot--gelb { background: var(--sy-gelb); }
+.dot--gruen { background: var(--sy-gruen); }
+.dot--rot { background: var(--sy-rot); }
+.dot--schwarz { background: var(--sy-schwarz); }
+.dot--mister-x { background: var(--sy-mister-x); }
+
+button.secondary {
+  align-self: flex-start;
+  font-family: var(--sy-font-sans);
+  font-weight: 600;
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--sy-brass-dark);
+  background: transparent;
+  color: var(--sy-ink);
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+button.primary {
+  font-family: var(--sy-font-sans);
+  font-weight: 700;
+  font-size: 15px;
+  padding: 10px 20px;
+  border-radius: var(--sy-radius);
+  border: 1px solid var(--sy-brass-dark);
+  background: var(--sy-brass);
+  color: var(--sy-ink);
+  cursor: pointer;
+  align-self: center;
+  width: 100%;
+  max-width: 260px;
+  margin: 0 auto;
+}
+
+.hint {
+  margin-top: 4px;
+  font-size: 11px;
+  color: #5a5a54;
+  line-height: 1.5;
+}
+
+/* ------------------------------------------------------------------ */
+/* Spielanleitung als Modal – "abrufbar", ohne das Basis-Layout zu     */
+/* verändern (Setup-Dialog bleibt scrollfrei, das Modal scrollt selbst).*/
+/* ------------------------------------------------------------------ */
+.rulebook-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.rulebook-modal {
+  background: var(--sy-paper);
+  color: var(--sy-ink);
+  border-radius: var(--sy-radius);
+  width: min(720px, 90vw);
+  max-height: 86vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.rulebook-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--sy-brass-dark);
+  flex-shrink: 0;
+}
+
+.rulebook-modal__close {
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  cursor: pointer;
+  color: var(--sy-ink);
+  padding: 4px 8px;
+}
+
+.rulebook-modal__body {
+  padding: 16px 22px 26px;
+  overflow-y: auto;
+  font-family: var(--sy-font-sans);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.rulebook-modal__source {
+  font-style: italic;
+  color: #5a5a54;
+  font-size: 12px;
+  margin-bottom: 18px;
+}
+
+.rulebook-modal__body h3 {
+  font-family: var(--sy-font-display);
+  font-size: 15px;
+  margin: 18px 0 6px;
+  border-bottom: 1px solid var(--sy-paper-dark);
+  padding-bottom: 4px;
+}
+
+.rulebook-modal__body section:first-of-type h3 {
+  margin-top: 0;
+}
+
+.rulebook-modal__body p {
+  margin: 0 0 10px;
+}
+
+/* Notebook-Optimierung: bei geringer Fensterhöhe automatisch kompakter. */
+@media (max-height: 700px) {
+  .setup {
+    padding: 14px 22px;
+    gap: 10px;
+  }
+  .setup__columns {
+    gap: 18px;
+  }
+  .column {
+    gap: 6px;
+  }
+}

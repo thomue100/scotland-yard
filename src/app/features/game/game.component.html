@@ -1,0 +1,156 @@
+<app-setup *ngIf="uiPhase === 'setup'" (startGame)="onStartGame($event)"></app-setup>
+
+<div class="game" *ngIf="uiPhase === 'playing'">
+  <div class="top-bar">
+    <app-player-hud
+      [round]="round()"
+      [maxRounds]="maxRounds()"
+      [revealRounds]="revealRounds()"
+      [currentTurnLabel]="currentTurnLabel"
+      [winnerLabel]="winnerLabel"
+    ></app-player-hud>
+
+    <div class="top-bar__meta">
+      <span>{{ roleLabel }}</span>
+
+      <label class="strategy-select" *ngIf="showDetectiveStrategySelector">
+        Detektiv-KI:
+        <select
+          [ngModel]="aiStrategies.activeDetectiveStrategyId()"
+          (ngModelChange)="aiStrategies.setDetectiveStrategy($event)"
+        >
+          <option *ngFor="let s of aiStrategies.availableDetectiveStrategies()" [value]="s.id">
+            {{ s.label }}
+          </option>
+        </select>
+      </label>
+
+      <label class="strategy-select" *ngIf="showMisterXStrategySelector">
+        Mister-X-KI:
+        <select
+          [ngModel]="aiStrategies.activeMisterXStrategyId()"
+          (ngModelChange)="aiStrategies.setMisterXStrategy($event)"
+        >
+          <option *ngFor="let s of aiStrategies.availableMisterXStrategies()" [value]="s.id">
+            {{ s.label }}
+          </option>
+        </select>
+      </label>
+
+      <label class="reveal-toggle">
+        <input
+          type="checkbox"
+          [checked]="devOptions().alwaysRevealMisterX"
+          (change)="onToggleAlwaysReveal($any($event.target).checked)"
+        />
+        Mister X immer sichtbar
+      </label>
+
+      <span class="ai-indicator" *ngIf="isAiTurn">KI überlegt …</span>
+      <button type="button" class="restart" (click)="onRestart()">Neues Spiel</button>
+    </div>
+  </div>
+
+  <div class="board-area">
+    <app-board
+      [variant]="variant()"
+      [detectives]="detectives()"
+      [misterXVisibleAt]="misterXVisibleAt"
+      [highlightedMoves]="highlightedMoves"
+      [originStation]="originStationForHighlight"
+      (stationClicked)="onStationClicked($event)"
+    ></app-board>
+
+    <!-- Overlay: Ticket-/Zug-Steuerung, einklappbar -->
+    <div class="overlay overlay--controls" [class.overlay--collapsed]="!controlsOpen">
+      <button type="button" class="overlay__toggle" (click)="controlsOpen = !controlsOpen">
+        {{ controlsOpen ? '‹' : '›' }} Steuerung
+      </button>
+      <div class="overlay__body" *ngIf="controlsOpen">
+        <app-ticket-panel
+          *ngIf="activeTickets as tk"
+          [tickets]="tk"
+          [ownerLabel]="currentTurnLabel"
+          [ownerColor]="currentOwnerColor"
+          [showSpecialTickets]="phase() === 'misterXMove'"
+        ></app-ticket-panel>
+
+        <div class="toolbar" *ngIf="!winnerLabel && !isAiTurn">
+          <div class="toolbar__label">Verkehrsmittel wählen:</div>
+          <div class="toolbar__buttons">
+            <button
+              type="button"
+              [class.active]="selectedTransport === TransportType.Taxi"
+              (click)="selectTransport(TransportType.Taxi)"
+            >Taxi</button>
+            <button
+              type="button"
+              [class.active]="selectedTransport === TransportType.Bus"
+              (click)="selectTransport(TransportType.Bus)"
+            >Bus</button>
+            <button
+              type="button"
+              [class.active]="selectedTransport === TransportType.UBahn"
+              (click)="selectTransport(TransportType.UBahn)"
+            >U-Bahn</button>
+            <button
+              type="button"
+              *ngIf="canUseBlack"
+              [class.active]="selectedTransport === TransportType.Black"
+              (click)="selectTransport(TransportType.Black)"
+            >Black</button>
+          </div>
+
+          <ng-container *ngIf="phase() === 'misterXMove'">
+            <button type="button" *ngIf="canUseDoubleMove" (click)="armDoubleMove()">
+              Doppelzug starten
+            </button>
+            <button type="button" *ngIf="doubleMoveArmed" (click)="cancelDoubleMove()">
+              Doppelzug abbrechen
+            </button>
+            <div class="hint" *ngIf="doubleMoveArmed && !doubleMoveFirstStep">
+              Erster Teilzug: Verkehrsmittel wählen, dann Ziel klicken.
+            </div>
+            <div class="hint" *ngIf="doubleMoveArmed && doubleMoveFirstStep">
+              Zweiter Teilzug ab Station {{ doubleMoveFirstStep.to }}: Verkehrsmittel wählen, dann Ziel klicken.
+            </div>
+          </ng-container>
+
+          <button
+            type="button"
+            *ngIf="phase() === 'detectiveMove' && !currentDetectiveCanMove"
+            (click)="skipDetective()"
+          >
+            Aussetzen (keine gültigen Züge)
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Overlay: Fahrtentafel / KI-Entscheidungen, einklappbar, mit Tabs -->
+    <div class="overlay overlay--logs" [class.overlay--collapsed]="!logsOpen">
+      <button type="button" class="overlay__toggle" (click)="logsOpen = !logsOpen">
+        Log {{ logsOpen ? '›' : '‹' }}
+      </button>
+      <div class="overlay__body" *ngIf="logsOpen">
+        <div class="tabs">
+          <button type="button" [class.active]="activeLogTab === 'fahrtentafel'" (click)="activeLogTab = 'fahrtentafel'">
+            Fahrtentafel
+          </button>
+          <button type="button" [class.active]="activeLogTab === 'ki'" (click)="activeLogTab = 'ki'">
+            KI-Entscheidungen
+          </button>
+        </div>
+
+        <app-move-log *ngIf="activeLogTab === 'fahrtentafel'" [entries]="misterX().moveLog"></app-move-log>
+
+        <div class="ai-log" *ngIf="activeLogTab === 'ki'">
+          <div class="ai-log__entry" *ngFor="let entry of aiDecisionLog">{{ entry }}</div>
+          <div class="ai-log__entry ai-log__entry--empty" *ngIf="aiDecisionLog.length === 0">
+            Noch keine KI-Entscheidungen.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

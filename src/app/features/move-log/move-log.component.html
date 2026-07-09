@@ -1,0 +1,19 @@
+<div class="fahrtentafel">
+  <div class="fahrtentafel__title">Fahrtentafel · Mister X</div>
+  <div class="fahrtentafel__grid">
+    <div
+      class="fenster"
+      *ngFor="let entry of entries"
+      [class.fenster--reveal]="entry.revealedStation !== null"
+    >
+      <span class="fenster__round">{{ entry.round }}</span>
+      <span class="fenster__symbol">{{ transportSymbol(entry) }}</span>
+      <span class="fenster__station" *ngIf="entry.revealedStation !== null">
+        {{ entry.revealedStation }}
+      </span>
+    </div>
+    <div class="fenster fenster--empty" *ngIf="entries.length === 0">
+      Noch keine Züge
+    </div>
+  </div>
+</div>

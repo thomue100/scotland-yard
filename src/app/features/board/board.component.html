@@ -1,0 +1,76 @@
+<div class="board-frame">
+  <svg
+    #svgRoot
+    class="board-svg"
+    [attr.viewBox]="'0 0 ' + viewBoxWidth + ' ' + viewBoxHeight"
+    preserveAspectRatio="xMidYMid meet"
+    (wheel)="onWheel($event)"
+    (pointerdown)="onPointerDown($event)"
+    (pointermove)="onPointerMove($event)"
+    (pointerup)="onPointerUp($event)"
+    (pointerleave)="onPointerUp($event)"
+  >
+    <g [attr.transform]="boardTransform">
+      <image
+        [attr.href]="boardImageSrc"
+        x="0"
+        y="0"
+        [attr.width]="viewBoxWidth"
+        [attr.height]="viewBoxHeight"
+        preserveAspectRatio="none"
+      />
+
+      <!-- Verbindungslinien zu den aktuell gültigen Zielen -->
+      <line
+        *ngFor="let l of connectorLines"
+        [attr.x1]="l.x1" [attr.y1]="l.y1"
+        [attr.x2]="l.x2" [attr.y2]="l.y2"
+        [attr.stroke]="l.color"
+        stroke-width="4"
+        stroke-dasharray="10 8"
+        opacity="0.85"
+      />
+
+      <!-- Klickbare Ziel-Marker -->
+      <g
+        *ngFor="let t of highlightedTargets; trackBy: trackByStationId"
+        class="target-marker"
+        (click)="onTargetClick(t.move)"
+      >
+        <circle [attr.cx]="t.x" [attr.cy]="t.y" r="26" [attr.fill]="t.color" opacity="0.28" />
+        <circle [attr.cx]="t.x" [attr.cy]="t.y" r="14" [attr.fill]="t.color" />
+        <text [attr.x]="t.x" [attr.y]="t.y + 5" text-anchor="middle" class="target-label">
+          {{ t.move.to }}
+        </text>
+      </g>
+
+      <!-- Detektiv-Spielfiguren -->
+      <image
+        *ngFor="let p of detectivePawns; trackBy: trackByPawnId"
+        [attr.href]="p.imageSrc"
+        [attr.x]="p.x"
+        [attr.y]="p.y"
+        [attr.width]="pawnWidth"
+        [attr.height]="pawnHeight"
+        class="pawn"
+      />
+
+      <!-- Mister X (nur bei Auftauch/Spielende sichtbar) -->
+      <image
+        *ngIf="misterXPawn as mx"
+        [attr.href]="mx.imageSrc"
+        [attr.x]="mx.x"
+        [attr.y]="mx.y"
+        [attr.width]="pawnWidth"
+        [attr.height]="pawnHeight"
+        class="pawn pawn-mister-x"
+      />
+    </g>
+  </svg>
+
+  <div class="zoom-controls">
+    <button type="button" (click)="zoomIn()" title="Vergrößern">+</button>
+    <button type="button" (click)="zoomOut()" title="Verkleinern">−</button>
+    <button type="button" (click)="resetView()" title="Ansicht zurücksetzen">⟲</button>
+  </div>
+</div>

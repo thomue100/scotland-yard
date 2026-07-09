@@ -1,0 +1,11 @@
+<div class="hud">
+  <span class="hud__brand">Scotland Yard</span>
+  <div class="hud__info">
+    <span>Runde <strong>{{ round }}</strong> / {{ maxRounds }}</span>
+    <span *ngIf="nextRevealRound !== null">
+      Nächster Auftauch: Runde <strong>{{ nextRevealRound }}</strong>
+    </span>
+    <span class="hud__turn" *ngIf="!winnerLabel">Am Zug: <strong>{{ currentTurnLabel }}</strong></span>
+    <span class="hud__winner" *ngIf="winnerLabel">{{ winnerLabel }}</span>
+  </div>
+</div>

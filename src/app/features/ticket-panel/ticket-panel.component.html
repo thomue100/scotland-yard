@@ -1,0 +1,11 @@
+<div class="ticket-panel">
+  <div class="owner" *ngIf="ownerLabel">
+    <span class="dot" [class]="'dot--' + ownerColor"></span>
+    {{ ownerLabel }}
+  </div>
+  <div class="row" *ngFor="let r of rows">
+    <span class="swatch" [style.background]="'var(' + r.colorVar + ')'"></span>
+    <span class="label">{{ r.label }}</span>
+    <span class="count">{{ r.count }}</span>
+  </div>
+</div>

@@ -1,0 +1,55 @@
+.fahrtentafel {
+  background: var(--sy-paper);
+  border-radius: var(--sy-radius);
+  padding: 12px 14px;
+  color: var(--sy-ink);
+}
+
+.fahrtentafel__title {
+  font-family: var(--sy-font-display);
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 8px;
+  letter-spacing: 0.03em;
+}
+
+.fahrtentafel__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.fenster {
+  font-family: var(--sy-font-mono);
+  font-size: 13px;
+  background: var(--sy-paper-dark);
+  border: 1px solid var(--sy-brass-dark);
+  border-radius: 4px;
+  padding: 4px 8px;
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  min-width: 46px;
+  justify-content: center;
+}
+
+.fenster--reveal {
+  background: var(--sy-brass-light);
+  border-color: var(--sy-brass-dark);
+  font-weight: 500;
+}
+
+.fenster--empty {
+  color: #6b6b6b;
+  font-style: italic;
+}
+
+.fenster__round {
+  opacity: 0.6;
+}
+
+.fenster__symbol {
+  font-weight: 700;
+}

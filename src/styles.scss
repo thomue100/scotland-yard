@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  /* Nächtliches London als Grundstimmung */
+  --sy-ink: #14171f;
+  --sy-ink-light: #1f2430;
+  --sy-paper: #ece4d0;
+  --sy-paper-dark: #d8cdae;
+  --sy-brass: #b8912f;
+  --sy-brass-light: #d9b95c;
+  --sy-brass-dark: #8a6a1f;
+
+  /* Detektiv-Farben (identisch zu den Spielfiguren) */
+  --sy-blau: #1d4fa0;
+  --sy-gelb: #e0a91a;
+  --sy-gruen: #1e6b3a;
+  --sy-rot: #a5322f;
+  --sy-schwarz: #1a1a1a;
+  --sy-mister-x: #3a3a3a;
+
+  --sy-font-display: 'Playfair Display', Georgia, serif;
+  --sy-font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+  --sy-font-sans: 'Inter', system-ui, sans-serif;
+
+  --sy-radius: 6px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--sy-ink);
+  color: var(--sy-paper);
+  font-family: var(--sy-font-sans);
+}
+
+/* Wiederverwendbares "Messingschild"-Element, angelehnt an das Scotland-Yard-Logo */
+.sy-plaque {
+  display: inline-block;
+  position: relative;
+  font-family: var(--sy-font-display);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: var(--sy-ink);
+  background: linear-gradient(180deg, var(--sy-brass-light), var(--sy-brass));
+  border: 2px solid var(--sy-brass-dark);
+  border-radius: 10px;
+  padding: 0.4em 1em;
+}
+
+.sy-plaque::before,
+.sy-plaque::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--sy-brass-dark);
+}
+.sy-plaque::before { left: 6px; }
+.sy-plaque::after { right: 6px; }
